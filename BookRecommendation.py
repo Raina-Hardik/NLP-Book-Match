@@ -6,9 +6,6 @@
 # Zenodo, Nov. 09, 2020. 
 # doi: 10.5281/zenodo.4265096.
 
-# In[ ]:
-
-
 # Import necessary libraries
 
 # csv parsing
@@ -24,26 +21,14 @@ from IPython.display import display
 import requests
 from io import BytesIO
 
-
-# In[ ]:
-
-
 # Reading in the CSV
 cols = ['bookId', 'author', 'title', 'rating', 'description', 'isbn', 'genres', 'coverImg']
 data = pd.read_csv("book_data.csv", index_col="bookId", usecols=cols).dropna()
-
-
-# In[ ]:
-
 
 # Major NLP generating term frequency-inverse document frequency matrix
 
 tfidf = TfidfVectorizer(stop_words='english')
 tfidf_matrix = tfidf.fit_transform(data['description'].values.astype('U'))
-
-
-# In[ ]:
-
 
 # Get names possible to the given book; Handles misspelled, incorrect case and other minor deviations
 
@@ -65,10 +50,6 @@ def get_possible_books(book:str) -> list:
         if book in name.lower():
             possible_books.append(name)
     return possible_books
-
-
-# In[ ]:
-
 
 # Generates the correct book name to be used for bookId indexing
 # Tries to fix the name as close as it can or prompts the user from the closest available matches
@@ -107,10 +88,6 @@ def correct_name(book_name:str):
         for book in possible_books:
             print(book)
         return 1
-
-
-# In[ ]:
-
 
 # Translate the book's name to it's bookID to then have a unique ID.
 # Uses the correct_name function to ensure the name can be looked up against the DataFrame
@@ -153,10 +130,6 @@ def name_to_bookId(book_name = None) -> str:
     except:
         print("Invalid input.")
 
-
-# In[ ]:
-
-
 # Print book relevant details and uses the coverImg url to print the coverpage
 
 def print_book_details(bookId_list:list[str]) -> None:
@@ -187,9 +160,6 @@ def print_book_details(bookId_list:list[str]) -> None:
         print("\n")
 
 
-# In[ ]:
-
-
 # NLP against the book summaries
 
 def similar_summary(bookId:str, k = 5) -> list:
@@ -214,10 +184,6 @@ def similar_summary(bookId:str, k = 5) -> list:
         recommended_books.append(book_bookId)
     return recommended_books
 
-
-# In[ ]:
-
-
 # KNN against the book genres
 
 def similar_genre(bookId: str, k: int = 5) -> str:
@@ -241,10 +207,6 @@ def similar_genre(bookId: str, k: int = 5) -> str:
         book_bookId = data.iloc[sorted_similar_books[i][0]].name
         recommended_books.append(book_bookId)
     return recommended_books
-
-
-# In[ ]:
-
 
 # Main interface to call similarity generation
 
@@ -274,10 +236,6 @@ def recommend_books(book_name = None, type = None, k = 5) -> None:
         books = set(similar_summary(bookId, k) + similar_genre(bookId, k))
     
     print_book_details(books)
-
-
-# In[ ]:
-
 
 # Sample Usage: 
 # recommend_books(book_name, type('genres', 'summary', None:Both), number_of_recommendations)
