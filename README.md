@@ -32,17 +32,6 @@ This will display the book details and cover images of the 3 most similar books 
 
 ## Sample Output
 
-<style>
-.table-center {
-  display: table;
-  margin: 0 auto;
-}
-img {
-  display: block;
-  margin: 0 auto;
-}
-</style>
-
 <div class="table-center">
   <table>
     <tr>
